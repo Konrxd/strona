@@ -4,29 +4,29 @@
     <title>AI Web Development Portfolio</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/fullpage.js/dist/fullpage.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/fullpage.js/dist/fullpage.min.js"></script>
-    <script src="https://unpkg.com/@heroicons/outline/24/solid"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
         }
 
         :root {
             --primary-color: #FFF9C4;
-            --secondary-color: #FFEB3B;
             --text-color: #333;
             --nav-height: 60px;
-            --force-refresh: true;
+        }
+
+        html, body {
+            overflow: hidden;
+            height: 100%;
         }
 
         body {
             color: var(--text-color);
-            overflow: hidden;
         }
 
         #navbar {
@@ -34,7 +34,6 @@
             top: 0;
             width: 100%;
             height: var(--nav-height);
-            background: transparent;
             z-index: 1000;
             display: flex;
             justify-content: center;
@@ -72,13 +71,16 @@
             transform: scaleX(1);
         }
 
-        .section {
-            background: var(--primary-color);
-            padding: var(--nav-height) 2rem 2rem;
+        #sections-container {
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .section:nth-child(even) {
+        .section {
+            height: 100vh;
             background: var(--primary-color);
+            padding: var(--nav-height) 2rem 2rem;
+            position: relative;
         }
 
         .content {
@@ -164,8 +166,47 @@
             background: white;
         }
 
-        #fp-nav ul li a span {
+        #page-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .page-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .page-dot.active {
             background: #333;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                padding: 0.3rem 0.6rem;
+            }
         }
     </style>
 </head>
@@ -181,22 +222,31 @@
         </ul>
     </nav>
 
-    <div id="fullpage">
-        <div class="section" data-anchor="home">
+    <div id="page-dots">
+        <div class="page-dot active" data-section="home"></div>
+        <div class="page-dot" data-section="about"></div>
+        <div class="page-dot" data-section="services"></div>
+        <div class="page-dot" data-section="projects"></div>
+        <div class="page-dot" data-section="process"></div>
+        <div class="page-dot" data-section="contact"></div>
+    </div>
+
+    <div id="sections-container">
+        <div id="home" class="section">
             <div class="content">
                 <h1>XYZ</h1>
                 <p>XYZ</p>
             </div>
         </div>
 
-        <div class="section" data-anchor="about">
+        <div id="about" class="section">
             <div class="content">
                 <h2>XYZ</h2>
                 <p>XYZ</p>
             </div>
         </div>
 
-        <div class="section" data-anchor="services">
+        <div id="services" class="section">
             <div class="content">
                 <h2>XYZ</h2>
                 <div class="skills-grid">
@@ -216,7 +266,7 @@
             </div>
         </div>
 
-        <div class="section" data-anchor="projects">
+        <div id="projects" class="section">
             <div class="content">
                 <h2>XYZ</h2>
                 <div class="project-grid">
@@ -236,7 +286,7 @@
             </div>
         </div>
 
-        <div class="section" data-anchor="process">
+        <div id="process" class="section">
             <div class="content">
                 <h2>XYZ</h2>
                 <div class="skills-grid">
@@ -256,7 +306,7 @@
             </div>
         </div>
 
-        <div class="section" data-anchor="contact">
+        <div id="contact" class="section">
             <div class="content">
                 <h2>XYZ</h2>
                 <p>XYZ</p>
@@ -269,19 +319,104 @@
     </div>
 
     <script>
-        new fullpage('#fullpage', {
-            navigation: true,
-            navigationPosition: 'right',
-            anchors: ['home', 'about', 'services', 'projects', 'process', 'contact'],
-            menu: '#navbar',
-            scrollingSpeed: 700,
-            licenseKey: null,
-            onLeave: function(origin, destination, direction) {
-                document.querySelectorAll('.nav-links a').forEach(link => {
-                    link.classList.remove('active');
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            const pageDots = document.querySelectorAll('.page-dot');
+            let currentSection = 0;
+            let isScrolling = false;
+
+            // Prevent default scroll behavior
+            document.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                if (!isScrolling) {
+                    if (e.deltaY > 0 && currentSection < sections.length - 1) {
+                        currentSection++;
+                        scrollToSection(currentSection);
+                    } else if (e.deltaY < 0 && currentSection > 0) {
+                        currentSection--;
+                        scrollToSection(currentSection);
+                    }
+                }
+            }, { passive: false });
+
+            // Handle keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!isScrolling) {
+                    if ((e.key === 'ArrowDown' || e.key === 'PageDown') && currentSection < sections.length - 1) {
+                        currentSection++;
+                        scrollToSection(currentSection);
+                    } else if ((e.key === 'ArrowUp' || e.key === 'PageUp') && currentSection > 0) {
+                        currentSection--;
+                        scrollToSection(currentSection);
+                    }
+                }
+            });
+
+            // Handle navigation clicks
+            navLinks.forEach((link, index) => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentSection = index;
+                    scrollToSection(currentSection);
                 });
-                document.querySelector(`.nav-links a[href="#${destination.anchor}"]`).classList.add('active');
+            });
+
+            // Handle page dots clicks
+            pageDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentSection = index;
+                    scrollToSection(currentSection);
+                });
+            });
+
+            function scrollToSection(index) {
+                if (isScrolling) return;
+                isScrolling = true;
+
+                // Update navigation
+                navLinks.forEach(link => link.classList.remove('active'));
+                navLinks[index].classList.add('active');
+
+                // Update dots
+                pageDots.forEach(dot => dot.classList.remove('active'));
+                pageDots[index].classList.add('active');
+
+                // Scroll to section
+                sections[index].scrollIntoView({ behavior: 'smooth' });
+
+                // Reset isScrolling after animation
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 1000);
             }
+
+            // Handle touch events for mobile
+            let touchStartY = 0;
+            let touchEndY = 0;
+
+            document.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+            }, { passive: false });
+
+            document.addEventListener('touchend', (e) => {
+                touchEndY = e.changedTouches[0].clientY;
+                const deltaY = touchEndY - touchStartY;
+
+                if (!isScrolling) {
+                    if (deltaY < -50 && currentSection < sections.length - 1) {
+                        currentSection++;
+                        scrollToSection(currentSection);
+                    } else if (deltaY > 50 && currentSection > 0) {
+                        currentSection--;
+                        scrollToSection(currentSection);
+                    }
+                }
+            });
         });
     </script>
 </body>
