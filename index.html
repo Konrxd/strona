@@ -33,12 +33,11 @@
             top: 0;
             width: 100%;
             height: var(--nav-height);
-            background: rgba(255, 255, 255, 0.95);
+            background: transparent;
             z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(5px);
         }
 
         .nav-links {
@@ -78,7 +77,7 @@
         }
 
         .section:nth-child(even) {
-            background: var(--secondary-color);
+            background: var(--primary-color);
         }
 
         .content {
@@ -184,33 +183,33 @@
     <div id="fullpage">
         <div class="section" data-anchor="home">
             <div class="content">
-                <h1>Tworzenie Stron z AI</h1>
-                <p>Specjalizuję się w tworzeniu nowoczesnych stron internetowych przy pomocy sztucznej inteligencji.</p>
+                <h1>XYZ</h1>
+                <p>XYZ</p>
             </div>
         </div>
 
         <div class="section" data-anchor="about">
             <div class="content">
-                <h2>O mnie</h2>
-                <p>Jestem pasjonatem technologii, który łączy tradycyjne umiejętności programistyczne z możliwościami sztucznej inteligencji. Tworzę innowacyjne rozwiązania webowe, które wyróżniają się na tle konkurencji.</p>
+                <h2>XYZ</h2>
+                <p>XYZ</p>
             </div>
         </div>
 
         <div class="section" data-anchor="services">
             <div class="content">
-                <h2>Usługi</h2>
+                <h2>XYZ</h2>
                 <div class="skills-grid">
                     <div class="skill-item">
-                        <h3>Strony WWW</h3>
-                        <p>Nowoczesne i responsywne strony internetowe</p>
+                        <h3>XYZ</h3>
+                        <p>XYZ</p>
                     </div>
                     <div class="skill-item">
-                        <h3>AI Integration</h3>
-                        <p>Integracja rozwiązań AI w projektach</p>
+                        <h3>XYZ</h3>
+                        <p>XYZ</p>
                     </div>
                     <div class="skill-item">
-                        <h3>Optymalizacja</h3>
-                        <p>Optymalizacja wydajności i SEO</p>
+                        <h3>XYZ</h3>
+                        <p>XYZ</p>
                     </div>
                 </div>
             </div>
@@ -218,19 +217,19 @@
 
         <div class="section" data-anchor="projects">
             <div class="content">
-                <h2>Projekty</h2>
+                <h2>XYZ</h2>
                 <div class="project-grid">
                     <div class="project-card">
-                        <h3>Portfolio AI</h3>
-                        <p>Strona portfolio stworzona z wykorzystaniem AI</p>
+                        <h3>XYZ</h3>
+                        <p>XYZ</p>
                     </div>
                     <div class="project-card">
-                        <h3>AI Chat Bot</h3>
-                        <p>Inteligentny bot czatowy dla firm</p>
+                        <h3>XYZ</h3>
+                        <p>XYZ</p>
                     </div>
                     <div class="project-card">
-                        <h3>Smart Website</h3>
-                        <p>Strona z elementami AI</p>
+                        <h3>XYZ</h3>
+                        <p>XYZ</p>
                     </div>
                 </div>
             </div>
@@ -238,19 +237,19 @@
 
         <div class="section" data-anchor="process">
             <div class="content">
-                <h2>Proces tworzenia</h2>
+                <h2>XYZ</h2>
                 <div class="skills-grid">
                     <div class="skill-item">
-                        <h3>1. Analiza</h3>
-                        <p>Określenie potrzeb i celów projektu</p>
+                        <h3>XYZ</h3>
+                        <p>XYZ</p>
                     </div>
                     <div class="skill-item">
-                        <h3>2. Projektowanie</h3>
-                        <p>Tworzenie projektu z AI</p>
+                        <h3>XYZ</h3>
+                        <p>XYZ</p>
                     </div>
                     <div class="skill-item">
-                        <h3>3. Implementacja</h3>
-                        <p>Realizacja i testy</p>
+                        <h3>XYZ</h3>
+                        <p>XYZ</p>
                     </div>
                 </div>
             </div>
@@ -258,11 +257,11 @@
 
         <div class="section" data-anchor="contact">
             <div class="content">
-                <h2>Kontakt</h2>
-                <p>Zainteresowany współpracą? Skontaktuj się ze mną!</p>
+                <h2>XYZ</h2>
+                <p>XYZ</p>
                 <div class="contact-links">
-                    <a href="https://github.com/Konrxd" target="_blank">GitHub</a>
-                    <a href="mailto:twoj@email.com">Email</a>
+                    <a href="https://github.com/Konrxd" target="_blank">XYZ</a>
+                    <a href="mailto:twoj@email.com">XYZ</a>
                 </div>
             </div>
         </div>
@@ -275,6 +274,7 @@
             anchors: ['home', 'about', 'services', 'projects', 'process', 'contact'],
             menu: '#navbar',
             scrollingSpeed: 700,
+            licenseKey: null,
             onLeave: function(origin, destination, direction) {
                 document.querySelectorAll('.nav-links a').forEach(link => {
                     link.classList.remove('active');
