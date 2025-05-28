@@ -108,6 +108,8 @@
             backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(37, 99, 235, 0.2);
             transition: all 0.3s ease;
+            opacity: 1 !important;
+            pointer-events: auto !important;
         }
 
         .nav-links {
@@ -617,7 +619,7 @@
             const size = Math.random() * 1.5 + 0.5;
             const geometry = new THREE.BoxGeometry(size, size, size);
             const material = new THREE.MeshBasicMaterial({
-                color: Math.random() > 0.5 ? 0x7C3AED : 0xF472B6,
+                color: Math.random() > 0.5 ? 0x2563eb : 0x3b82f6,
                 wireframe: true,
                 transparent: true,
                 opacity: 0.8
@@ -670,8 +672,8 @@
                         cube2.velocity.copy(tempVel);
                         
                         // Color change on collision
-                        cube1.material.color.setHex(Math.random() > 0.5 ? 0x7C3AED : 0xF472B6);
-                        cube2.material.color.setHex(Math.random() > 0.5 ? 0x7C3AED : 0xF472B6);
+                        cube1.material.color.setHex(Math.random() > 0.5 ? 0x2563eb : 0x3b82f6);
+                        cube2.material.color.setHex(Math.random() > 0.5 ? 0x2563eb : 0x3b82f6);
                         
                         // Separate cubes
                         const separation = cube1.position.clone().sub(cube2.position).normalize().multiplyScalar(minDistance - distance);
@@ -1062,7 +1064,7 @@
                         const size = Math.random() * 1.5 + 0.5;
                         const geometry = new THREE.BoxGeometry(size, size, size);
                         const material = new THREE.MeshBasicMaterial({
-                            color: Math.random() > 0.5 ? 0x7C3AED : 0xF472B6,
+                            color: Math.random() > 0.5 ? 0x2563eb : 0x3b82f6,
                             wireframe: true,
                             transparent: true,
                             opacity: 0.8
