@@ -1,147 +1,287 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <title>Moje Portfolio</title>
+    <title>AI Web Development Portfolio</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/fullpage.js/dist/fullpage.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/fullpage.js/dist/fullpage.min.js"></script>
+    <script src="https://unpkg.com/@heroicons/outline/24/solid"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #FFF9C4;
+            --secondary-color: #FFEB3B;
+            --text-color: #333;
+            --nav-height: 60px;
         }
 
         body {
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            color: var(--text-color);
+            overflow: hidden;
         }
 
-        header {
-            text-align: center;
-            padding: 50px 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 40px;
+        #navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #333;
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-links a.active::after {
+            transform: scaleX(1);
+        }
+
+        .section {
+            background: var(--primary-color);
+            padding: var(--nav-height) 2rem 2rem;
+        }
+
+        .section:nth-child(even) {
+            background: var(--secondary-color);
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         h1 {
-            font-size: 2.5em;
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-
-        .intro {
-            font-size: 1.2em;
-            color: #666;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        section {
-            margin: 40px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
         }
 
         h2 {
-            color: #2c3e50;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
         }
 
-        .projects {
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .project-card {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .project-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .contact {
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .skill-item {
             text-align: center;
-            padding: 40px 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-top: 40px;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
         }
 
-        .social-links {
-            margin-top: 20px;
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .social-links a {
-            color: #2c3e50;
+        .contact-links a {
+            color: var(--text-color);
             text-decoration: none;
-            margin: 0 10px;
-            font-weight: bold;
+            font-weight: 500;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            transition: transform 0.3s, background 0.3s;
         }
 
-        .social-links a:hover {
-            color: #3498db;
+        .contact-links a:hover {
+            transform: translateY(-3px);
+            background: white;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            header {
-                padding: 30px 10px;
-            }
+        #fp-nav ul li a span {
+            background: #333;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Moje Portfolio</h1>
-        <p class="intro">Witaj na mojej stronie portfolio! Jestem programistą webowym i tworzę nowoczesne aplikacje internetowe.</p>
-    </header>
+    <nav id="navbar">
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Start</a></li>
+            <li><a href="#about">O mnie</a></li>
+            <li><a href="#services">Usługi</a></li>
+            <li><a href="#projects">Projekty</a></li>
+            <li><a href="#process">Proces</a></li>
+            <li><a href="#contact">Kontakt</a></li>
+        </ul>
+    </nav>
 
-    <section>
-        <h2>O mnie</h2>
-        <p>Jestem pasjonatem technologii i programowania. Specjalizuję się w tworzeniu responsywnych stron internetowych i aplikacji webowych.</p>
-    </section>
-
-    <section>
-        <h2>Projekty</h2>
-        <div class="projects">
-            <div class="project-card">
-                <h3>Projekt 1</h3>
-                <p>Opis pierwszego projektu i wykorzystanych technologii.</p>
-            </div>
-            <div class="project-card">
-                <h3>Projekt 2</h3>
-                <p>Opis drugiego projektu i wykorzystanych technologii.</p>
-            </div>
-            <div class="project-card">
-                <h3>Projekt 3</h3>
-                <p>Opis trzeciego projektu i wykorzystanych technologii.</p>
+    <div id="fullpage">
+        <div class="section" data-anchor="home">
+            <div class="content">
+                <h1>Tworzenie Stron z AI</h1>
+                <p>Specjalizuję się w tworzeniu nowoczesnych stron internetowych przy pomocy sztucznej inteligencji.</p>
             </div>
         </div>
-    </section>
 
-    <section class="contact">
-        <h2>Kontakt</h2>
-        <p>Zapraszam do kontaktu i współpracy!</p>
-        <div class="social-links">
-            <a href="https://github.com/Konrxd" target="_blank">GitHub</a>
-            <a href="mailto:twoj@email.com">Email</a>
+        <div class="section" data-anchor="about">
+            <div class="content">
+                <h2>O mnie</h2>
+                <p>Jestem pasjonatem technologii, który łączy tradycyjne umiejętności programistyczne z możliwościami sztucznej inteligencji. Tworzę innowacyjne rozwiązania webowe, które wyróżniają się na tle konkurencji.</p>
+            </div>
         </div>
-    </section>
+
+        <div class="section" data-anchor="services">
+            <div class="content">
+                <h2>Usługi</h2>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <h3>Strony WWW</h3>
+                        <p>Nowoczesne i responsywne strony internetowe</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>AI Integration</h3>
+                        <p>Integracja rozwiązań AI w projektach</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>Optymalizacja</h3>
+                        <p>Optymalizacja wydajności i SEO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-anchor="projects">
+            <div class="content">
+                <h2>Projekty</h2>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h3>Portfolio AI</h3>
+                        <p>Strona portfolio stworzona z wykorzystaniem AI</p>
+                    </div>
+                    <div class="project-card">
+                        <h3>AI Chat Bot</h3>
+                        <p>Inteligentny bot czatowy dla firm</p>
+                    </div>
+                    <div class="project-card">
+                        <h3>Smart Website</h3>
+                        <p>Strona z elementami AI</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-anchor="process">
+            <div class="content">
+                <h2>Proces tworzenia</h2>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <h3>1. Analiza</h3>
+                        <p>Określenie potrzeb i celów projektu</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>2. Projektowanie</h3>
+                        <p>Tworzenie projektu z AI</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>3. Implementacja</h3>
+                        <p>Realizacja i testy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-anchor="contact">
+            <div class="content">
+                <h2>Kontakt</h2>
+                <p>Zainteresowany współpracą? Skontaktuj się ze mną!</p>
+                <div class="contact-links">
+                    <a href="https://github.com/Konrxd" target="_blank">GitHub</a>
+                    <a href="mailto:twoj@email.com">Email</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new fullpage('#fullpage', {
+            navigation: true,
+            navigationPosition: 'right',
+            anchors: ['home', 'about', 'services', 'projects', 'process', 'contact'],
+            menu: '#navbar',
+            scrollingSpeed: 700,
+            onLeave: function(origin, destination, direction) {
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.querySelector(`.nav-links a[href="#${destination.anchor}"]`).classList.add('active');
+            }
+        });
+    </script>
 </body>
 </html>
