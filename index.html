@@ -74,13 +74,35 @@
         #sections-container {
             height: 100vh;
             overflow: hidden;
+            position: relative;
         }
 
         .section {
             height: 100vh;
             background: var(--primary-color);
             padding: var(--nav-height) 2rem 2rem;
-            position: relative;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(100px);
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out, visibility 0s linear 0.6s;
+        }
+
+        .section.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+        }
+
+        .section.previous {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-100px);
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out, visibility 0s linear 0.6s;
         }
 
         .content {
@@ -326,6 +348,41 @@
             let currentSection = 0;
             let isScrolling = false;
 
+            // Initialize first section
+            sections[0].classList.add('active');
+
+            function updateSectionClasses(newIndex) {
+                sections.forEach((section, index) => {
+                    section.classList.remove('active', 'previous');
+                    if (index === newIndex) {
+                        section.classList.add('active');
+                    } else if (index < newIndex) {
+                        section.classList.add('previous');
+                    }
+                });
+            }
+
+            function scrollToSection(index) {
+                if (isScrolling) return;
+                isScrolling = true;
+
+                // Update navigation
+                navLinks.forEach(link => link.classList.remove('active'));
+                navLinks[index].classList.add('active');
+
+                // Update dots
+                pageDots.forEach(dot => dot.classList.remove('active'));
+                pageDots[index].classList.add('active');
+
+                // Update sections with animation classes
+                updateSectionClasses(index);
+
+                // Reset isScrolling after animation
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 600);
+            }
+
             // Prevent default scroll behavior
             document.addEventListener('wheel', (e) => {
                 e.preventDefault();
@@ -369,27 +426,6 @@
                     scrollToSection(currentSection);
                 });
             });
-
-            function scrollToSection(index) {
-                if (isScrolling) return;
-                isScrolling = true;
-
-                // Update navigation
-                navLinks.forEach(link => link.classList.remove('active'));
-                navLinks[index].classList.add('active');
-
-                // Update dots
-                pageDots.forEach(dot => dot.classList.remove('active'));
-                pageDots[index].classList.add('active');
-
-                // Scroll to section
-                sections[index].scrollIntoView({ behavior: 'smooth' });
-
-                // Reset isScrolling after animation
-                setTimeout(() => {
-                    isScrolling = false;
-                }, 1000);
-            }
 
             // Handle touch events for mobile
             let touchStartY = 0;
