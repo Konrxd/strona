@@ -38,27 +38,29 @@
 
         html {
             height: 100%;
-            overflow-y: auto;
-            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
         }
 
         body {
             color: var(--text-color);
             min-height: 100vh;
             overflow-x: hidden;
+            perspective: 1px;
+            transform-style: preserve-3d;
         }
 
         #sections-container {
             position: relative;
+            transform-style: preserve-3d;
         }
 
         .section {
-            height: 100vh;
-            padding: var(--nav-height) 2rem 2rem;
-            position: relative;
+            min-height: 100vh;
+            padding: calc(var(--nav-height) + 2rem) 2rem 2rem;
             width: 100%;
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
+            position: relative;
+            transform-style: preserve-3d;
         }
 
         .content {
@@ -66,6 +68,9 @@
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            transform: translateZ(0);
         }
 
         #navbar {
@@ -77,6 +82,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .nav-links {
@@ -384,27 +391,29 @@
         for (let i = 0; i < cubeCount; i++) {
             const material = new THREE.MeshBasicMaterial({
                 color: new THREE.Color(`hsl(${Math.random() * 60 + 40}, 70%, 70%)`),
-                wireframe: true
+                wireframe: true,
+                transparent: true,
+                opacity: 0.7
             });
             const cube = new THREE.Mesh(geometry, material);
             
             // Random position
-            cube.position.x = Math.random() * 20 - 10;
-            cube.position.y = Math.random() * 20 - 10;
-            cube.position.z = Math.random() * 20 - 15;
+            cube.position.x = Math.random() * 30 - 15;
+            cube.position.y = Math.random() * 30 - 15;
+            cube.position.z = Math.random() * 20 - 25;
             
             // Random velocity
             cube.velocity = {
-                x: (Math.random() - 0.5) * 0.05,
-                y: (Math.random() - 0.5) * 0.05,
-                z: (Math.random() - 0.5) * 0.05
+                x: (Math.random() - 0.5) * 0.03,
+                y: (Math.random() - 0.5) * 0.03,
+                z: (Math.random() - 0.5) * 0.03
             };
             
             // Random rotation speed
             cube.rotationSpeed = {
-                x: (Math.random() - 0.5) * 0.02,
-                y: (Math.random() - 0.5) * 0.02,
-                z: (Math.random() - 0.5) * 0.02
+                x: (Math.random() - 0.5) * 0.01,
+                y: (Math.random() - 0.5) * 0.01,
+                z: (Math.random() - 0.5) * 0.01
             };
             
             scene.add(cube);
@@ -424,14 +433,19 @@
                 cube.position.z += cube.velocity.z;
 
                 // Bounce off walls
-                if (Math.abs(cube.position.x) > 10) cube.velocity.x *= -1;
-                if (Math.abs(cube.position.y) > 10) cube.velocity.y *= -1;
-                if (Math.abs(cube.position.z) > 10) cube.velocity.z *= -1;
+                if (Math.abs(cube.position.x) > 15) cube.velocity.x *= -1;
+                if (Math.abs(cube.position.y) > 15) cube.velocity.y *= -1;
+                if (Math.abs(cube.position.z) > 15) cube.velocity.z *= -1;
 
                 // Rotate
                 cube.rotation.x += cube.rotationSpeed.x;
                 cube.rotation.y += cube.rotationSpeed.y;
                 cube.rotation.z += cube.rotationSpeed.z;
+
+                // React to scroll
+                const scrollY = window.scrollY;
+                cube.rotation.x += scrollY * 0.0001;
+                cube.rotation.y += scrollY * 0.0001;
             });
 
             renderer.render(scene, camera);
@@ -467,22 +481,7 @@
                         
                         navLinks[index].classList.add('active');
                         pageDots[index].classList.add('active');
-
-                        // Affect background cubes based on scroll
-                        cubes.forEach(cube => {
-                            cube.rotation.x += 0.01;
-                            cube.rotation.y += 0.01;
-                        });
                     }
-                });
-            }
-
-            // Smooth scroll to section
-            function scrollToSection(index) {
-                const targetSection = sections[index];
-                window.scrollTo({
-                    top: targetSection.offsetTop,
-                    behavior: 'smooth'
                 });
             }
 
@@ -492,13 +491,15 @@
             navLinks.forEach((link, index) => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    scrollToSection(index);
+                    const targetSection = sections[index];
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
                 });
             });
 
             pageDots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
-                    scrollToSection(index);
+                    const targetSection = sections[index];
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
                 });
             });
 
@@ -506,16 +507,16 @@
             document.addEventListener('keydown', (e) => {
                 const currentIndex = Array.from(sections).findIndex(section => {
                     const rect = section.getBoundingClientRect();
-                    return rect.top <= 0 && rect.bottom > 0;
+                    return rect.top <= window.innerHeight/2 && rect.bottom >= window.innerHeight/2;
                 });
 
                 if (e.key === 'ArrowDown' || e.key === 'PageDown') {
                     if (currentIndex < sections.length - 1) {
-                        scrollToSection(currentIndex + 1);
+                        sections[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
                     }
                 } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
                     if (currentIndex > 0) {
-                        scrollToSection(currentIndex - 1);
+                        sections[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
                     }
                 }
             });
