@@ -16,12 +16,15 @@
         }
 
         :root {
-            --primary-color: #00ff41;
-            --secondary-color: #0a0a0a;
-            --text-color: #ffffff;
-            --accent-color: #ff0080;
+            --primary-color: #7C3AED;
+            --secondary-color: #0F172A;
+            --text-color: #E2E8F0;
+            --accent-color: #F472B6;
             --nav-height: 60px;
-            --glow-color: rgba(0, 255, 65, 0.3);
+            --glow-color: rgba(124, 58, 237, 0.3);
+            --gradient-1: #7C3AED;
+            --gradient-2: #F472B6;
+            --gradient-3: #3B82F6;
         }
 
         #background-canvas {
@@ -38,7 +41,7 @@
             padding: 0;
             overflow: hidden;
             height: 100vh;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%);
             color: var(--text-color);
         }
 
@@ -62,7 +65,7 @@
         }
 
         .content {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(15px);
             border: 2px solid var(--primary-color);
             padding: 3rem;
@@ -79,7 +82,7 @@
             left: -2px;
             right: -2px;
             bottom: -2px;
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color), var(--primary-color));
+            background: linear-gradient(45deg, var(--gradient-1), var(--gradient-2), var(--gradient-3));
             z-index: -1;
             animation: borderGlow 3s linear infinite;
         }
@@ -175,7 +178,7 @@
             margin-bottom: 2rem;
             text-transform: uppercase;
             letter-spacing: 3px;
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            background: linear-gradient(45deg, var(--gradient-1), var(--gradient-2), var(--gradient-3));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -617,7 +620,7 @@
             matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.04)';
             matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
             
-            matrixCtx.fillStyle = '#00ff41';
+            matrixCtx.fillStyle = '#7C3AED';
             matrixCtx.font = fontSize + 'px monospace';
             
             for(let i = 0; i < drops.length; i++) {
@@ -651,7 +654,7 @@
             const size = Math.random() * 1.5 + 0.5;
             const geometry = new THREE.BoxGeometry(size, size, size);
             const material = new THREE.MeshBasicMaterial({
-                color: Math.random() > 0.5 ? 0x00ff41 : 0xff0080,
+                color: Math.random() > 0.5 ? 0x7C3AED : 0xF472B6,
                 wireframe: true,
                 transparent: true,
                 opacity: 0.8
@@ -704,8 +707,8 @@
                         cube2.velocity.copy(tempVel);
                         
                         // Color change on collision
-                        cube1.material.color.setHex(Math.random() > 0.5 ? 0x00ff41 : 0xff0080);
-                        cube2.material.color.setHex(Math.random() > 0.5 ? 0x00ff41 : 0xff0080);
+                        cube1.material.color.setHex(Math.random() > 0.5 ? 0x7C3AED : 0xF472B6);
+                        cube2.material.color.setHex(Math.random() > 0.5 ? 0x7C3AED : 0xF472B6);
                         
                         // Separate cubes
                         const separation = cube1.position.clone().sub(cube2.position).normalize().multiplyScalar(minDistance - distance);
@@ -1096,7 +1099,7 @@
                         const size = Math.random() * 1.5 + 0.5;
                         const geometry = new THREE.BoxGeometry(size, size, size);
                         const material = new THREE.MeshBasicMaterial({
-                            color: Math.random() > 0.5 ? 0x00ff41 : 0xff0080,
+                            color: Math.random() > 0.5 ? 0x7C3AED : 0xF472B6,
                             wireframe: true,
                             transparent: true,
                             opacity: 0.8
